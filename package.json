@@ -1,0 +1,22 @@
+{
+  "name": "roomateserver",
+  "version": "1.0.0",
+  "description": "server for syntelRoomate",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "norberto lopez",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-fileupload": "^0.4.0",
+    "jsonwebtoken": "^8.3.0",
+    "mysql": "^2.16.0",
+    "nodemailer": "^4.6.8",
+    "nodemon": "^1.18.4"
+  }
+}
