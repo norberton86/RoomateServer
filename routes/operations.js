@@ -41,7 +41,7 @@ router.get("/images/:email",ensureToken,function(req,res,next){
           {
             res.json({"status":"success",data:result.map((v,i,a) => { 
         
-              return {uri:"http://localhost:3000/"+v.url}
+              return {uri:utils.baseUrl+v.url}
             })})
           }
         });
@@ -273,7 +273,7 @@ router.get("/info/:email",ensureToken,function(req,res,next){
                   if (!err) {
                        images=files.filter(i=>i.indexOf(req.params.email)>=0).map((v,i,a) => { 
         
-                        return {uri:"http://localhost:3000/"+v}
+                        return {uri:utils.baseUrl+v}
                       })
                   } 
         
