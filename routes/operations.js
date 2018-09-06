@@ -28,24 +28,21 @@ router.get("/images/:email",ensureToken,function(req,res,next){
       } 
       else 
       {
-        var con = mysql.createConnection(utils.connection_data);
-        var query="select url from sql9255207.image where email='"+req.params.email+"'";
-        console.log(query)
-        con.query(query, function (err, result) {
-        
-          if(err){
-            
-            res.sendStatus(400);
-          }
-          else
-          {
-            res.json({"status":"success",data:result.map((v,i,a) => { 
-        
-              return {uri:utils.baseUrl+v.url}
-            })})
-          }
-        });
+        fs.readdir('public', function (err, files) {
 
+          var images=[]
+
+          if (err) {
+            res.json({"status":"error","message":"Error trying get files"}) 
+          } 
+
+          images=files.filter(i=>i.indexOf(req.params.email)>=0).map((v,i,a) => { 
+
+            return {uri:utils.baseUrl+v}
+          })
+          res.json({"status":"success","data":images})  
+          
+        });
         
       }
     });
@@ -98,27 +95,7 @@ router.post('/uploadImage/:id', ensureToken, function(req, res) {
               if (err)
               return res.json({status:"error",message:"Error uploading picture"});
 
-              var con = mysql.createConnection(utils.connection_data);
-  
-              con.connect(function(err) {
-                if(err) 
-                {
-                  res.sendStatus(400);
-                }
-                else
-                {
-                  con.query("insert into sql9255207.image (email,url) values ('"+req.params.id.split('-')[0]+"','"+req.params.id+"')", function (err, result) {
-                    
-                    if(err){
-                      res.sendStatus(400);
-                    }
-                    else
-                    {
-                      res.json({"status":"success"}) 
-                    }
-                  });
-                }
-              });
+              res.json({"status":"success"}) 
           
           });
       }
