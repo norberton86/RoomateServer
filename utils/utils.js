@@ -1,5 +1,5 @@
 const secret_key='bajanda'
-const baseUrl='http://localhost:3000/'  //'https://afternoon-meadow-68062.herokuapp.com/'
+const baseUrl= 'https://afternoon-meadow-68062.herokuapp.com/' //'http://localhost:3000/'
 const email_credentials={
     user: 'norberton86@gmail.com',
     pass: 'alexandernevski'
