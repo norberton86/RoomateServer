@@ -115,27 +115,7 @@ router.get("/removeImage/:id",ensureToken,function(req,res,next){
               var filePath = 'public/'+req.params.id; 
               fs.unlinkSync(filePath);
 
-              var con = mysql.createConnection(utils.connection_data);
-  
-              con.connect(function(err) {
-                if(err) 
-                {
-                  res.sendStatus(400);
-                }
-                else
-                {
-                  con.query("delete from sql9255207.image WHERE url='"+req.params.id+"'", function (err, result) {
-                    
-                    if(err){
-                      res.sendStatus(400);
-                    }
-                    else
-                    {
-                      res.json({"status":"success"}) 
-                    }
-                  });
-                }
-              });
+              res.json({"status":"success"}) 
           }
           catch(ex){
               res.json({status:ex})
