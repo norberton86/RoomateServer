@@ -22,21 +22,6 @@ SET time_zone = "+00:00";
 -- Database: `sql9255207`
 --
 
--- --------------------------------------------------------
-
---
--- Table structure for table `image`
---
-
-CREATE TABLE `image` (
-  `email` varchar(50) NOT NULL,
-  `url` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `image`
---
-
 
 -- --------------------------------------------------------
 

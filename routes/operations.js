@@ -57,23 +57,32 @@ router.get("/filter/:state/:city",ensureToken,function(req,res,next){
         } 
         else 
         {
-          var con = mysql.createConnection(utils.connection_data);
+              var con = mysql.createConnection(utils.connection_data);
   
-          con.query("select email,fullName,phone from sql9255207.user where  accountActive=1 and state='"+req.params.state+"' and city='"+req.params.city+"'", function (err, result) {
-          
-            if(err){
-              res.sendStatus(400);
-            }
-            else
-            {
-              res.json({"status":"success",data:result})
-            }
-          });
+              con.connect(function(err) {
+                if(err) 
+                {
+                  res.sendStatus(400);
+                }
+                else
+                {
+                  con.query("select email,fullName,phone from sql9255207.user where  accountActive=1 and state='"+req.params.state+"' and city='"+req.params.city+"'", function (err, result) {
+              
+                    con.destroy();
+                    if(err){
+                      res.sendStatus(400);
+                    }
+                    else
+                    {
+                      res.json({"status":"success",data:result})
+                    }
+                  });
 
-          
+                  
+                }
+              });     
         }
       });
-
 });
 
 router.post('/uploadImage/:id', ensureToken, function(req, res) {
@@ -144,6 +153,7 @@ router.get("/activate/:status/:email",ensureToken,function(req,res,next){
           {
             con.query("UPDATE sql9255207.user SET accountActive="+req.params.status+" WHERE email='"+req.params.email+"'", function (err, result) {
               
+              con.destroy();
               if(err){
                 res.sendStatus(400);
               }
@@ -178,6 +188,7 @@ router.get("/updateInfo/:phone/:state/:city/:email",ensureToken,function(req,res
           {
             con.query("UPDATE sql9255207.user SET phone='"+req.params.phone+"',state='"+req.params.state+"',city='"+req.params.city+"' WHERE email='"+req.params.email+"'", function (err, result) {
               
+              con.destroy();
               if(err){
                 res.sendStatus(400);
               }
@@ -213,6 +224,7 @@ router.get("/info/:email",ensureToken,function(req,res,next){
           {
             con.query("select * from sql9255207.user where email='"+req.params.email+"'", function (err, result) {
               
+              con.destroy();
               if(err){
                 res.sendStatus(400);
               }

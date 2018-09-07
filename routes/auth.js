@@ -26,6 +26,7 @@ router.get("/login/:user/:pass",function(req,res,next){
       {
         con.query("select * from sql9255207.user where email='"+user+"' and pass='"+pass+"'", function (err, result) {
           
+          con.destroy();
           if(err){
             res.sendStatus(400);
           }
@@ -65,6 +66,7 @@ router.get("/recover/:email",function(req,res,next){
     {
       con.query("select pass from sql9255207.user where email='"+email+"'", function (err, result) {
         
+        con.destroy();
         if(err){
           res.sendStatus(400);
         }
@@ -117,6 +119,7 @@ router.post("/singUp",function(req,res,next){
     {
       con.query("insert into sql9255207.user(email,fullName,pass,phone,state,city,accountActive) values ('"+req.body.email+"','"+req.body.fullName+"','"+req.body.pass+"','"+req.body.phone+"','"+req.body.state+"','"+req.body.city+"',1)", function (err, result) {
         
+        con.destroy();
         if(err){
           res.json({status:"duplicate"});
         }
