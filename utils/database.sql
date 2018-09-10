@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sql9.freemysqlhosting.net
--- Generation Time: Sep 05, 2018 at 02:00 PM
+-- Generation Time: Sep 10, 2018 at 08:25 PM
 -- Server version: 5.5.58-0ubuntu0.14.04.1
 -- PHP Version: 7.0.30-0ubuntu0.16.04.1
 
@@ -22,6 +22,16 @@ SET time_zone = "+00:00";
 -- Database: `sql9255207`
 --
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `image`
+--
+
+CREATE TABLE `image` (
+  `url` text NOT NULL,
+  `finalName` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -42,6 +52,10 @@ CREATE TABLE `user` (
 --
 -- Dumping data for table `user`
 --
+
+INSERT INTO `user` (`email`, `fullName`, `pass`, `phone`, `state`, `city`, `accountActive`) VALUES
+('norberto@syntel.com', 'norberto lopez', '123', '8329232869', 'New York', 'Buffalo', 1),
+('norberton86@gmail.com', 'israel', '', '', '', '', NULL);
 
 --
 -- Indexes for dumped tables
