@@ -28,7 +28,8 @@ router.get("/images/:email",ensureToken,function(req,res,next){
       } 
       else 
       {
-        fs.readdir('public', function (err, files) {
+
+        /*fs.readdir('public', function (err, files) {
 
           var images=[]
 
@@ -42,6 +43,43 @@ router.get("/images/:email",ensureToken,function(req,res,next){
           })
           res.json({"status":"success","data":images})  
           
+        });*/
+
+        var con = mysql.createConnection(utils.connection_data);
+  
+        con.connect(function(err) {
+          if(err) 
+          {
+            res.sendStatus(400);
+          }
+          else
+          {
+            var con = mysql.createConnection(utils.connection_data);
+  
+            con.connect(function(err) {
+              if(err) 
+              {
+                res.sendStatus(400);
+              }
+              else
+              {
+
+                con.query("select url from sql9255207.image where finalName LIKE '%"+req.params.email+"%'", function (err, result) {
+        
+                  con.destroy()
+                  if (err) {
+                    res.status(400).send(err);
+                  } 
+
+                  res.json({"status":"success","data":result.map((v,i,a) => { 
+
+                    return {uri:v.url}
+                  })})  
+                  
+                });
+              }
+            });
+          }
         });
         
       }
@@ -85,7 +123,7 @@ router.get("/filter/:state/:city",ensureToken,function(req,res,next){
       });
 });
 
-router.post('/uploadImage/:id', ensureToken, function(req, res) {
+router.post('/uploadImage', ensureToken, function(req, res) {
 
   jwt.verify(req.token, utils.secret_key, function(err, data) {
       if (err) {
@@ -93,6 +131,7 @@ router.post('/uploadImage/:id', ensureToken, function(req, res) {
       } 
       else 
       {
+        /*
           if (!req.files)
           return res.json({status:"error",message:"No files were uploaded"});
        
@@ -106,6 +145,30 @@ router.post('/uploadImage/:id', ensureToken, function(req, res) {
 
               res.json({"status":"success"}) 
           
+          });*/
+
+          var con = mysql.createConnection(utils.connection_data);
+  
+          con.connect(function(err) {
+            if(err) 
+            {
+              res.status(400).send(err);
+            }
+            else
+            {
+              console.log(req.body)
+              con.query("insert into sql9255207.image (finalName,url) values ('"+req.body.finalName+"','"+req.body.url+"')", function (err, result) {
+                
+                con.destroy();
+                if(err){
+                  res.status(400).send(err);
+                }
+                else
+                {
+                  res.json({"status":"success"}) 
+                }
+              });
+            }
           });
       }
  });
@@ -120,15 +183,40 @@ router.get("/removeImage/:id",ensureToken,function(req,res,next){
       } 
       else 
       {
-          try{
+          /*try{
               var filePath = 'public/'+req.params.id; 
-              fs.unlinkSync(filePath);
+              fs.unlinkSync(filePath); //remove the file
 
               res.json({"status":"success"}) 
           }
           catch(ex){
               res.json({status:ex})
-          }
+          }*/
+
+          var filename=req.params.id
+          
+          var con = mysql.createConnection(utils.connection_data);
+
+          con.connect(function(err) {
+            if(err) 
+            {
+              res.status(400).send(err);
+            }
+            else
+            {
+              con.query("delete from sql9255207.image where finalName='"+filename+"'", function (err, result) {
+                
+                con.destroy();
+                if(err){
+                  res.status(400).send(err);
+                }
+                else
+                {
+                  res.json({"status":"success"}) 
+                }
+              });
+            }
+          });
       }
     });
 
@@ -224,7 +312,7 @@ router.get("/info/:email",ensureToken,function(req,res,next){
           {
             con.query("select * from sql9255207.user where email='"+req.params.email+"'", function (err, result) {
               
-              con.destroy();
+             
               if(err){
                 res.sendStatus(400);
               }
@@ -235,15 +323,11 @@ router.get("/info/:email",ensureToken,function(req,res,next){
                 var state=result[0].state
                 var city=result[0].city
 
-                fs.readdir('public', function (err, files) {
-
-                  var images=[]
+                con.query("select * from sql9255207.image where finalName LIKE '%"+req.params.email+"%'", function (err, result) {
         
-                  if (!err) {
-                       images=files.filter(i=>i.indexOf(req.params.email)>=0).map((v,i,a) => { 
-        
-                        return {uri:utils.baseUrl+v}
-                      })
+                  con.destroy()
+                  if (err) {
+                    res.status(400).send(err);
                   } 
         
                   var info={
@@ -251,7 +335,10 @@ router.get("/info/:email",ensureToken,function(req,res,next){
                     phone:phone,
                     state:state,
                     city:city,
-                    images:images
+                    images:result.map((v,i,a) => { 
+
+                      return {uri:v.url,name:v.finalName}
+                    })
                   }
         
                   console.log(info)
