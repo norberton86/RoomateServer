@@ -7,7 +7,7 @@ var mysql = require('mysql');
 
 
 router.get("/",function(req,res,next){
-  res.json({name:"Syntel Roomate"});
+  res.json({name:"Syntel Roomate by Norberto Lopez"});
 });
 
 router.get("/login/:user/:pass",function(req,res,next){
